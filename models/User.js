@@ -6,6 +6,12 @@ const userSchema = new Schema({
   email: String,
   password: String,
   githubId: String,
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ],
   date: {
     type: Date,
     default: Date.now

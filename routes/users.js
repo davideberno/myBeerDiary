@@ -4,6 +4,7 @@ const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
 const Comment = require("../models/Comment");
+//const loginCheck = require("../app");
 
 router.get("/login", (req, res) => res.render("login"));
 
