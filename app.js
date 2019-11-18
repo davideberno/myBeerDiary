@@ -93,4 +93,4 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
 
-app.listen(3000, console.log("Server started on port 3000"));
+app.listen(3005, console.log("Server started on port 3005"));

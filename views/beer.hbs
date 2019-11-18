@@ -1,0 +1,25 @@
+<form id="comment-form">
+  <div class="form-group">
+    <label for="comment">Comment</label>
+    <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+  </div>
+  <button type="submit">Send comment</button>
+</form>
+
+<script>
+  document.getElementById('comment-form').onsubmit = event => {
+    event.preventDefault();
+
+    axios.post("/users/comments", {
+      comment: document.getElementById('comment').value
+    }).then(res => {
+      console.log(res)
+      let commentBox = '<h2>Comments</h2>';
+      commentBox += `<h4>${res.data.user}</h4><p>${res.data.comment}</p>`
+      document.getElementById("comment-box").innerHTML = commentBox;
+      document.getElementById('comment').value = ""
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+</script>
