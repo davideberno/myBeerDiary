@@ -59,7 +59,18 @@ router.post(
   })
 );
 
+router.get("/github", passport.authenticate("github"));
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    failureRedirect: "/users/login",
+    successRedirect: "/dashboard"
+  })
+);
+
 router.post("/comments", (req, res) => {
+  console.log(req.user);
   Comment.create({ user: req.user.name, comment: req.body.comment })
     .then(newComment => {
       res.json(newComment);

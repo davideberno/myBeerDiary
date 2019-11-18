@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const hbs = require("hbs");
@@ -9,6 +11,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const User = require("./models/User");
+const GithubStrategy = require("passport-github").Strategy;
 
 const app = express();
 
@@ -38,21 +41,6 @@ app.use(
 );
 
 //Passport
-
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-
-passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then(user => {
-      done(null, user);
-    })
-    .catch(err => {
-      done(err);
-    });
-});
-
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
     User.findOne({ email: email })
@@ -74,6 +62,47 @@ passport.use(
       });
   })
 );
+
+passport.use(
+  new GithubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/users/github/callback"
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOne({ githubId: profile.id })
+        .then(user => {
+          if (user) {
+            // log the user in
+            done(null, user);
+          } else {
+            return User.create({ githubId: profile.id }).then(newUser => {
+              // log user in
+              done(null, newUser);
+            });
+          }
+        })
+        .catch(err => {
+          done(err);
+        });
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id)
+    .then(user => {
+      done(null, user);
+    })
+    .catch(err => {
+      done(err);
+    });
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
