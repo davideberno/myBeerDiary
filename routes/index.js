@@ -10,8 +10,12 @@ router.get("/dashboard", loginCheck(), (req, res) => {
   });
 });
 
-router.get("/beers", (req, res) => {
-  res.send(beers);
+router.get("/beer", (req, res) => {
+  res.render("beer");
+});
+
+router.get("/submit-beer", (req, res) => {
+  res.render("submit-beer");
 });
 
 module.exports = router;

@@ -1,0 +1,28 @@
+<div id="beer-search">
+  <label for=""></label>
+  <input type="text" id="searchfield-beer" name="searchfield-beer">
+  <button type="submit">Search!</button>
+</div>
+
+<div id="beer-creator">
+  <h3>Didn't find your beer?</h3>
+  <h4>Create it yourself:</h4>
+</div>
+
+<div id="beer-form">
+  <form action="/feed" method="post">
+    <label for="name">Name (required): </label>
+    <input type="text" name="name" id="name">
+    <label for="brewery">Brewery: </label>
+    <input type="text" name="brewery" id="brewery">
+    <label for="ABV">ABV (alcohol percentage): </label>
+    <input type="number" name="abv" id="abv">
+    <label for="price">Price paid: </label>
+    <input type="number" name="price" id="price">
+    <label for="location">Location bought:</label>
+    <input type="text" name="location" id="location">
+    <label for="comment">Your comment (required): </label>
+    <input type="text" name="comment" id="comment">
+    <button type="submit">Post your comment!</button>
+  </form>
+</div>

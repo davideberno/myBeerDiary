@@ -7,10 +7,12 @@
     <button type="submit" id="submit-beer">Submit new beer!</button>
 </div>
 
-<div id="comment-box">
-
-</div>
 
 <a href="/users/logout" class="btn btn-secondary mt-5">Logout</a>
 
 
+<script>
+    document.getElementById("submit-beer").onclick = function () {
+        location.href = "/submit-beer";
+    };
+</script>
