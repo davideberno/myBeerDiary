@@ -20,6 +20,17 @@ router.get("/submit-beer", loginCheck(), (req, res) => {
   res.render("submit-beer");
 });
 
+router.get("/beer/:beerName", (request, response) => {
+  const beerName = request.params.beerName;
+
+  const beer = beer.find(el => {
+    if (el.fields.name === beerName) {
+      return true;
+    }
+  });
+  response.render("beer.hbs", { beerInfo: beer });
+});
+
 router.post("/submit-beer", loginCheck(), (req, res) => {
   const { name, name_breweries, abv, image, price, comment } = req.body;
   Comment.create({ user: req.user._id, comment: comment })
@@ -36,7 +47,7 @@ router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
       res.render("submit-beer", { searchResult: found });
-      //res.send(found);
+      /* res.send(found); */
     })
     .catch(err => console.log(err));
 });

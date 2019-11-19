@@ -1,57 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Searchresult</title>
-  {{!--   <script>
-    function displayPrice(newPrice) {
-      let price = document.getElementById("price")
-      if (price ==== 0) {
-        return "Not given"
-      } return price
-    }
-
-    let abv = {{ fields.abv }}
-    if (abv === 0) {
-      return "Not given"
-    } return abv
-
-  </script> --}}
-</head>
-
-<body>
-  <div class="card mb-3">
-    <h3 class="card-header">Name: {{fields.name}} </h3>
-    <div class="card-body">
-      <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
-    </div>
-    {{#if fields.image}}
-    <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+<div class="card mb-3">
+  <h3 class="card-header">Name: <a href="/beer/{{fields.name}}">{{fields.name}}</a> </h3>
+  <div class="card-body">
+    <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
+  </div>
+  {{#if fields.image}}
+  <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+  {{/if}}
+  <ul class="list-group list-group-flush">
+    {{#if fields.abv}}
+    <li id="abv" class="list-group-item">ABV: {{fields.abv}}</li>
     {{/if}}
-    <ul class="list-group list-group-flush">
-      {{#if fields.abv}}
-      <li id="abv" class="list-group-item">ABV: {{fields.abv}}</li>
-      {{/if}}
-      <li class="list-group-item">Country of origin: {{fields.country}}</li>
-      {{#if fields.price }}
-      <li id="price" class="list-group-item">Price: {{fields.price}}</li>
-      {{/if}}
-    </ul>
-    <div>
-      {{!-- {{#each comment}}
+    <li class="list-group-item">Country of origin: {{fields.country}}</li>
+    {{#if fields.price }}
+    <li id="price" class="list-group-item">Price: {{fields.price}}</li>
+    {{/if}}
+  </ul>
+  <div>
+    {{!-- {{#each comment}}
     beerId.commentArray
   {{/each}} --}}
-    </div>
   </div>
-
-
-
-
-
-
-</body>
-
-</html>
+</div>
