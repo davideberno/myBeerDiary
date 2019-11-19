@@ -2,20 +2,27 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const beerSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  brewery: String,
-  abv: Number,
-  image: String,
-  comments: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Comment"
-    }
-  ]
+  fields: {
+    name: String,
+    name_breweries: String,
+    style_name: String,
+    cat_name: String,
+    country: String,
+    coordinates: [],
+    abv: Number,
+    ibu: Number,
+    image: String,
+    price: Number,
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment"
+      }
+    ]
+  }
 });
+
+beerSchema.index({ "fields.name": "text", "fields.name_breweries": "text" });
 
 const Beer = mongoose.model("Beer", beerSchema);
 

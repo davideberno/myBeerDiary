@@ -4,7 +4,6 @@ const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
 const Comment = require("../models/Comment");
-//const loginCheck = require("../app");
 
 router.get("/login", (req, res) => res.render("login"));
 
@@ -41,8 +40,12 @@ router.post("/register", (req, res) => {
                 name: name,
                 email: email,
                 password: hash
+              }).then(newUser => {
+                req.login(newUser, err => {
+                  if (err) next(err);
+                  else res.redirect("/dashboard");
+                });
               });
-              res.render("login", { msg: "Signed in!" });
             });
           });
         }
@@ -69,15 +72,6 @@ router.get(
     successRedirect: "/dashboard"
   })
 );
-
-router.post("/comments", (req, res) => {
-  console.log(req.user);
-  Comment.create({ user: req.user.name, comment: req.body.comment })
-    .then(newComment => {
-      res.json(newComment);
-    })
-    .catch(err => console.log(err));
-});
 
 router.get("/logout", (req, res) => {
   req.logout();

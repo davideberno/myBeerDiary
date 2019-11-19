@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Database connection
 mongoose
-  .connect("mongodb://localhost/project-logi", {
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/mybeerdiary", {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -54,4 +54,3 @@ app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
 
 app.listen(process.env.PORT, console.log("Server started on port 3000"));
-//module.exports = loginCheck;
