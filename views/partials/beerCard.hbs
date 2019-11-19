@@ -1,13 +1,14 @@
 <div>
-  <h3>Name: {{}} </h3>
-  <p>Brewery: {{}}</p>
-  <p>ABV: {{}}</p>
-  <p>Price: {{}}</p>
-  <p>Location: {{}}</p>
+  <h3>Name: {{beer.fields.name}} </h3>
+  <p>Brewery: {{beer.fields.name_breweries}}</p>
+  <p>ABV: {{beer.fields.abv}}</p>
+  <p>Price: {{beer.fields.price}}</p>
+  <p>Location: {{beer.fields.country}}</p>
+  <p>{{comment}}</p>
 </div>
-<div id="beer-image" class="card-body">
+{{!-- <div id="beer-image" class="card-body">
   <img src="{{}}" style="height: 200px; width: 100px; display: block;" alt="image of the beer">
-</div>
+</div> --}}
 
 {{!-- <div>
   {{#each comment}}
