@@ -1,15 +1,27 @@
-<div id="search-h1">
-  <h1>What are you drinking?</h1>
+<div class="jumbotron">
+  <div id="search-h1">
+    <h1 class="display-3">What are you drinking?</h1>
+  </div>
+
+  <div id="beer-search">
+    <form action="/search" method="POST">
+      <p class="lead">
+        <input class="form-control form-control-lg" type="text" id="search" name="search">
+        <button type="submit" role="button" class="btn btn-primary btn-lg">Search!</button>
+      </p>
+    </form>
+  </div>
 </div>
 
-<div id="beer-search">
-  <form action="/search" method="POST">
-    <input type="text" id="search" name="search">
-    <button type="submit">Search!</button>
-  </form>
-</div>
 
-{{#if }}
+
+{{#if searchResult}}
+
+<div class="cards-container">
+  {{#each searchResult}}
+  {{> beerCard}}
+  {{/each}}
+</div>
 
 {{/if}}
 
@@ -36,17 +48,18 @@
     </div>
     <div class="form-group">
       <label for="ABV">ABV (alcohol percentage): </label>
-      <input type="number" name="abv" id="abv" class="form-control" placeholder="Enter abv">
+      <input type="number" step="any" name="abv" id="abv" class="form-control" placeholder="Enter abv">
     </div>
     <div class="form-group">
       <label for="price">Price paid (Euros): </label>
-      <input type="number" name="price" id="price" class="form-control" placeholder="Enter the price you paid">
+      <input type="number" step="any" name="price" id="price" class="form-control"
+        placeholder="Enter the price you paid">
     </div>
     <div class="form-group">
       <label for="location">Location bought:</label>
       <input type="text" name="location" id="location" class="form-control"
         placeholder="Enter the location you bought it">
     </div>
-    <button type="submit" class="btn btn-primary btn-block">Post your comment!</button>
+    <button type="submit" class="btn btn-primary">Post your beer!</button>
   </form>
 </div>

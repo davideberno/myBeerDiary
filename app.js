@@ -10,6 +10,8 @@ const flash = require("connect-flash");
 
 const app = express();
 
+hbs.registerPartials(__dirname + "/views/partials");
+
 // Bodyparser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
