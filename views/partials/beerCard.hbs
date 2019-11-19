@@ -1,17 +1,24 @@
-<div>
-  <h3>Name: {{beer.fields.name}} </h3>
-  <p>Brewery: {{beer.fields.name_breweries}}</p>
-  <p>ABV: {{beer.fields.abv}}</p>
-  <p>Price: {{beer.fields.price}}</p>
-  <p>Location: {{beer.fields.country}}</p>
-  <p>{{comment}}</p>
-</div>
-{{!-- <div id="beer-image" class="card-body">
-  <img src="{{}}" style="height: 200px; width: 100px; display: block;" alt="image of the beer">
-</div> --}}
-
-{{!-- <div>
-  {{#each comment}}
+<body>
+  <div class="card mb-3">
+    <h3 class="card-header">Name: {{fields.name}} </h3>
+    <div class="card-body">
+      <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
+    </div>
+    {{#if fields.image}}
+    <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+    {{/if}}
+    <ul class="list-group list-group-flush">
+      {{#if fields.abv}}
+      <li id="abv" class="list-group-item">ABV: {{fields.abv}}</li>
+      {{/if}}
+      <li class="list-group-item">Country of origin: {{fields.country}}</li>
+      {{#if fields.price }}
+      <li id="price" class="list-group-item">Price: {{fields.price}}</li>
+      {{/if}}
+    </ul>
+    <div>
+      {{!-- {{#each comment}}
     beerId.commentArray
-  {{/each}}
-</div> --}}
+  {{/each}} --}}
+    </div>
+  </div>
