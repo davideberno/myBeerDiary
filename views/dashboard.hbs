@@ -1,7 +1,8 @@
 <h1 class="mt-4">Welcome {{user}}</h1>
-
-{{#if comments}}
-{{#each comments}}
-{{> beerCard}}
-{{/each}}
-{{/if}}
+<div class="grid">
+  {{#if comments}}
+  {{#each comments}}
+  {{> beerCardProfile}}
+  {{/each}}
+  {{/if}}
+</div>

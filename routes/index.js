@@ -8,17 +8,14 @@ const User = require("../models/User");
 router.get("/", (req, res) => res.render("index"));
 
 router.get("/dashboard", loginCheck(), (req, res) => {
-  User.findOneAndUpdate({ user: req.user._id })
+  Comment.find({ user: req.user._id })
     .populate({
-      path: "comments",
-      populate: {
-        path: "beer"
-      }
+      path: "beer"
     })
-    .then(user => {
+    .then(comments => {
+      //res.send(comments);
       res.render("dashboard", {
-        user: user.name,
-        comments: user.comments
+        comments
       });
     })
     .catch(err => console.log(err));
@@ -49,8 +46,7 @@ router.post("/submit-beer", loginCheck(), (req, res) => {
       }).then(newBeer => {
         Comment.findOneAndUpdate(
           { _id: newComment._id },
-          { $push: { beer: newBeer._id } },
-          { new: true }
+          { beer: newBeer._id }
         ).then(comment => {
           User.findOneAndUpdate(
             { _id: req.user._id },
