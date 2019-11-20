@@ -1,29 +1,3 @@
-<div class="jumbotron col-md-10 m-auto">
-  <div id="search-h1">
-    <h1 class="display-3">What are you drinking?</h1>
-  </div>
-
-  <div id="beer-search">
-    <form action="/search" method="POST">
-      <p class="lead">
-        <input class="form-control form-control-lg" type="text" id="search" name="search">
-        <button type="submit" role="button" class="btn btn-primary btn-lg">Search!</button>
-      </p>
-    </form>
-  </div>
-</div>
-
-
-
-{{#if searchResult}}
-
-<div class="cards-container">
-  {{#each searchResult}}
-  {{> beerCard}}
-  {{/each}}
-</div>
-{{/if}}
-
 <div id="search-h3">
   <h3>Didn't find it?</h3></br>
   <h4>Create it yourself:</h4>

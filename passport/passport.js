@@ -4,7 +4,6 @@ const User = require("../models/User");
 const GithubStrategy = require("passport-github").Strategy;
 const passport = require("passport");
 
-//Passport
 passport.use(
   new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
     User.findOne({ email: email })
@@ -16,7 +15,6 @@ passport.use(
           if (!match) {
             return done(null, false, { message: "Invalid credentials" });
           } else {
-            // passwords match
             return done(null, user);
           }
         });
@@ -38,11 +36,15 @@ passport.use(
       User.findOne({ githubId: profile.id })
         .then(user => {
           if (user) {
-            // log the user in
+            console.log(profile);
             done(null, user);
           } else {
-            return User.create({ githubId: profile.id }).then(newUser => {
-              // log user in
+            return User.create({
+              githubId: profile.id,
+              name: profile.displayName,
+              username: profile.username,
+              profilePicture: profile.photos[0].value
+            }).then(newUser => {
               done(null, newUser);
             });
           }

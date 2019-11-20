@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   name: String,
-  email: String,
+  username: String,
   password: String,
   githubId: String,
+  profilePicture: String,
   comments: [
     {
       type: Schema.Types.ObjectId,

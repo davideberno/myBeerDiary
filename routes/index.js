@@ -5,7 +5,32 @@ const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 
-router.get("/", (req, res) => res.render("index"));
+router.get("/", (req, res) => {
+  if (req.user) {
+    res.redirect("/feeds");
+  } else {
+    res.render("index");
+  }
+});
+
+router.get("/feeds", loginCheck(), (req, res) => {
+  Comment.find()
+    .limit(5)
+    .populate({
+      path: "beer"
+    })
+    .populate({
+      path: "user"
+    })
+    .then(comments => {
+      //res.send(comments);
+      res.render("feeds", {
+        user: req.user.name,
+        comments: comments
+      });
+    })
+    .catch(err => console.log(err));
+});
 
 router.get("/dashboard", loginCheck(), (req, res) => {
   Comment.find({ user: req.user._id })
@@ -15,14 +40,11 @@ router.get("/dashboard", loginCheck(), (req, res) => {
     .then(comments => {
       //res.send(comments);
       res.render("dashboard", {
-        user: req.user.name,
+        user: req.user,
         comments: comments
       });
     })
     .catch(err => console.log(err));
-  // res.render("dashboard", {
-  //   user: req.user.name
-  // });
 });
 
 router.get("/beer", loginCheck(), (req, res) => {
@@ -65,8 +87,7 @@ router.post("/submit-beer", loginCheck(), (req, res) => {
 router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
-      res.render("submit-beer", { searchResult: found });
-      //res.send(found);
+      res.render("search", { searchResult: found });
     })
     .catch(err => console.log(err));
 });
