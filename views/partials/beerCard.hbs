@@ -1,5 +1,5 @@
 <div class="card mb-3">
-  <h3 class="card-header">Name: <a href="/beer/{{_id}}">{{fields.name}}</a> </h3>
+  <h3 class="card-header">Name: >{{fields.name}} </h3>
   <div class="card-body">
     <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
   </div>
@@ -18,8 +18,9 @@
     <li id="ibu" class="list-group-item">IBU: {{fields.ibu}}</li>
     {{/if}}
   </ul>
-  <div class="card mb-3">
-    <button type="submit">Comment</button>
+  <div id="comment-card" class="card mb-3">
+    <input type="text" name="comment-beer" id="comment-beer">
+    <button id="comment-button">Comment</button>
   </div>
 
   <div>
@@ -28,3 +29,10 @@
   {{/each}} --}}
   </div>
 </div>
+
+{{!-- <script>
+  document.getElementById("comment-button").onclick = () => {
+    let createInput = document.createElement("input");
+    document.getElementById("comment-card").appendChild(createInput)
+  }
+</script> --}}

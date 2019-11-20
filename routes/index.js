@@ -114,16 +114,8 @@ router.post("/search", (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.get("/beer/:beerName", (request, response) => {
-  const beerName = request.params.beerName;
 
-  const beer = beer.find(el => {
-    if (el.name === beerName) {
-      return true;
-    }
-  });
 
-  response.render("beer.hbs", { beerInfo: beer });
-});
+
 
 module.exports = router;
