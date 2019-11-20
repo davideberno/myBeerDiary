@@ -106,6 +106,10 @@ router.post("/submit-beer", loginCheck(), (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.get("/search", (req, res) => {
+  res.render("search");
+});
+
 router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
