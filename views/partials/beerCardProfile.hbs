@@ -1,10 +1,9 @@
-<div class="col-md">
-  <div class="card card-body mb-3">
-    <h3 class="card-header">Name: {{beer.fields.name}} </h3>
-    {{#if beer.fields.name_breweries}}
-    <div class="card-body">
-      <h5 class="card-title">Brewery: {{beer.fields.name_breweries}}</h5>
-    </div>
+<div class="card card-body mb-3">
+  <h3 class="card-header"><a href="/beer/{{_id}}">{{beer.fields.name}} </a></h3>
+  {{#if beer.fields.name_breweries}}
+  <div class="card-body">
+    <h5 class="card-title">Brewery: {{beer.fields.name_breweries}}</h5>
+
     {{/if}}
     {{#if beer.fields.image}}
     <img src="{{beer.fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
@@ -20,5 +19,6 @@
       <li id="price" class="list-group-item">Price: {{beer.fields.price}}</li>
       {{/if}}
     </ul>
+    <p class="card-text mt-2">You said: {{comment}}</p>
   </div>
 </div>

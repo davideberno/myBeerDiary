@@ -106,24 +106,16 @@ router.post("/submit-beer", loginCheck(), (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.get("/search", (req, res) => {
+  res.render("search");
+});
+
 router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
       res.render("search", { searchResult: found });
     })
     .catch(err => console.log(err));
-});
-
-router.get("/beer/:beerName", (request, response) => {
-  const beerName = request.params.beerName;
-
-  const beer = beer.find(el => {
-    if (el.name === beerName) {
-      return true;
-    }
-  });
-
-  response.render("beer.hbs", { beerInfo: beer });
 });
 
 module.exports = router;
