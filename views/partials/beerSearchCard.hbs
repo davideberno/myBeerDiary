@@ -6,25 +6,20 @@
   {{#if fields.image}}
   <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
   {{/if}}
-  <ul class="list-group list-group-flush">
+  {{!--   <ul class="list-group list-group-flush">
     {{#if fields.abv}}
     <li id="abv" class="list-group-item">ABV: {{fields.abv}}</li>
     {{/if}}
     <li class="list-group-item">Country of origin: {{fields.country}}</li>
     {{#if fields.price }}
     <li id="price" class="list-group-item">Price: {{fields.price}}</li>
-    {{/if}}
-    {{#if fields.ibu }}
-    <li id="ibu" class="list-group-item">IBU: {{fields.ibu}}</li>
-    {{/if}}
+    {{/if}} --}}
   </ul>
-  <div class="card mb-3">
-    <button type="submit">Comment</button>
-  </div>
-
   <div>
-    {{!-- {{#each comment}}
-    beerId.commentArray
-  {{/each}} --}}
+    {{#if beer.fields.comments}}
+    {{#each beer.fields.comments}}
+    {{> commentCard}}
+    {{/each}}
+    {{/if}}
   </div>
 </div>

@@ -8,6 +8,8 @@ const hbs = require("hbs");
 
 hbs.registerPartials(__dirname + "/views/partials");
 
+hbs.registerPartials(__dirname + "/views/partials");
+
 router.get("/login", (req, res) => res.render("login"));
 
 router.get("/register", (req, res) => res.render("signin"));

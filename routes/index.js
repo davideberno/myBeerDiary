@@ -8,20 +8,22 @@ const hbs = require("hbs");
 
 hbs.registerPartials(__dirname + "/views/partials");
 
+hbs.registerPartials(__dirname + "/views/partials");
+
+hbs.registerPartials(__dirname + "/views/partials");
+
 router.get("/", (req, res) => res.render("index"));
 
 router.get("/dashboard", loginCheck(), (req, res) => {
-  User.findOneAndUpdate({ user: req.user._id })
+  Comment.find({ user: req.user._id })
     .populate({
-      path: "comments",
-      populate: {
-        path: "beer"
-      }
+      path: "beer"
     })
-    .then(user => {
+    .then(comments => {
+      //res.send(comments);
       res.render("dashboard", {
-        user: user.name,
-        comments: user.comments
+        user: req.user.name,
+        comments: comments
       });
     })
     .catch(err => console.log(err));
@@ -38,15 +40,19 @@ router.get("/submit-beer", loginCheck(), (req, res) => {
   res.render("submit-beer");
 });
 
-router.get("/beer/:beerName", (request, response) => {
-  const beerName = request.params.beerName;
+router.get("/beer/:beerId", (req, res) => {
+  Beer.findOne({ _id: req.params.beerId })
+    .then(beer => {
+      console.log(beer);
+      res.render("beer.hbs", { beer });
+    })
+    .catch(err => console.log(err));
 
-  const beer = beer.find(el => {
+  /*   const beer = beer.find(el => {
     if (el.fields.name === beerName) {
       return true;
     }
-  });
-  response.render("beer.hbs", { beerInfo: beer });
+  }); */
 });
 
 router.post("/submit-beer", loginCheck(), (req, res) => {
@@ -63,8 +69,7 @@ router.post("/submit-beer", loginCheck(), (req, res) => {
       }).then(newBeer => {
         Comment.findOneAndUpdate(
           { _id: newComment._id },
-          { $push: { beer: newBeer._id } },
-          { new: true }
+          { beer: newBeer._id }
         ).then(comment => {
           User.findOneAndUpdate(
             { _id: req.user._id },
@@ -83,8 +88,20 @@ router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
       res.render("submit-beer", { searchResult: found });
-      /* res.send(found); */
     })
     .catch(err => console.log(err));
 });
+
+router.get("/beer/:beerName", (request, response) => {
+  const beerName = request.params.beerName;
+
+  const beer = beer.find(el => {
+    if (el.name === beerName) {
+      return true;
+    }
+  });
+
+  response.render("beer.hbs", { beerInfo: beer });
+});
+
 module.exports = router;
