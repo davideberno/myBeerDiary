@@ -4,6 +4,9 @@ const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
 const Comment = require("../models/Comment");
+const hbs = require("hbs");
+
+hbs.registerPartials(__dirname + "/views/partials");
 
 router.get("/login", (req, res) => res.render("login"));
 

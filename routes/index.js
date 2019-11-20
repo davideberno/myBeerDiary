@@ -4,6 +4,9 @@ const loginCheck = require("../middleware/loginCheck");
 const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
+const hbs = require("hbs");
+
+hbs.registerPartials(__dirname + "/views/partials");
 
 router.get("/", (req, res) => res.render("index"));
 
