@@ -5,6 +5,8 @@ const router = express.Router();
 const User = require("../models/User");
 const Comment = require("../models/Comment");
 
+hbs.registerPartials(__dirname + "/views/partials");
+
 router.get("/login", (req, res) => res.render("login"));
 
 router.get("/register", (req, res) => res.render("signin"));

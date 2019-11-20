@@ -5,6 +5,8 @@ const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 
+hbs.registerPartials(__dirname + "/views/partials");
+
 router.get("/", (req, res) => res.render("index"));
 
 router.get("/dashboard", loginCheck(), (req, res) => {
@@ -66,8 +68,20 @@ router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
       res.render("submit-beer", { searchResult: found });
-      //res.send(found);
     })
     .catch(err => console.log(err));
 });
+
+router.get("/beer/:beerName", (request, response) => {
+  const beerName = request.params.beerName;
+
+  const beer = beer.find(el => {
+    if (el.name === beerName) {
+      return true;
+    }
+  });
+
+  response.render("beer.hbs", { beerInfo: beer });
+});
+
 module.exports = router;
