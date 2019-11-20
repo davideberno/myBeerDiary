@@ -15,7 +15,8 @@ router.get("/dashboard", loginCheck(), (req, res) => {
     .then(comments => {
       //res.send(comments);
       res.render("dashboard", {
-        comments
+        user: req.user.name,
+        comments: comments
       });
     })
     .catch(err => console.log(err));

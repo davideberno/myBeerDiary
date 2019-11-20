@@ -1,3 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
+  margin: 0 auto;
+}
+
+#github-login {
+  width: 13px;
+  height: auto;
+}
+
+.logo-small {
+  width: 30px;
+  height: auto;
+  margin-right: 0.8em;
+}
+.transparent-background {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.background-login {
+  background-image: url("../img/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 #comment-box {
   margin: 40px;
 }
@@ -17,8 +48,4 @@
 
 #nav-search {
   margin-right: 10px;
-}
-
-.btn-primary {
-  margin-bottom: 20px;
 }

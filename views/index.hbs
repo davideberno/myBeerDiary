@@ -1,6 +1,8 @@
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="card card-body text-center">
+        <div class="card card-body text-white text-center transparent-background">
+            <h1>myBeerDiary</h1>
+            <img class="logo mb-3" src="../img/beer-logo.png" alt="logo">
 
             {{#if msg}}
             {{> success}}
@@ -8,7 +10,8 @@
             <p>Create an account or login</p>
             <a href="/users/register" class="btn btn-primary btn-block mb-2">Register</a>
             <a href="/users/login" class="btn btn-secondary btn-block">Login</a>
-            <a href="/users/github/" class="btn btn-secondary btn-block">Github</a>
+            <a href="/users/github/" class="btn btn-secondary btn-block"><img id="github-login"
+                    src="../img/GitHub-logo.png" alt=""> Github</a>
         </div>
     </div>
 </div>

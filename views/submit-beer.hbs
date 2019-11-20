@@ -1,4 +1,4 @@
-<div class="jumbotron">
+<div class="jumbotron col-md-10 m-auto">
   <div id="search-h1">
     <h1 class="display-3">What are you drinking?</h1>
   </div>
@@ -29,7 +29,8 @@
   <h4>Create it yourself:</h4>
 </div>
 
-<div id="beer-form">
+
+<div id="beer-form" class="col-md-6 m-auto text-white">
   <form action="/submit-beer" method="POST">
     <div class="form-group"> <label for="name">Name (required): </label>
       <input type="text" name="name" id="name" class="form-control" placeholder="Enter name">
@@ -59,6 +60,6 @@
       <input type="text" name="location" id="location" class="form-control"
         placeholder="Enter the location you bought it">
     </div>
-    <button type="submit" class="btn btn-primary">Post your beer!</button>
+    <button type="submit" class="btn btn-primary mb-6">Post your beer!</button>
   </form>
 </div>
