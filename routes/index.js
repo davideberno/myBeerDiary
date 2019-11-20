@@ -5,6 +5,9 @@ const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 
+
+hbs.registerPartials(__dirname + "/views/partials");
+
 hbs.registerPartials(__dirname + "/views/partials");
 
 router.get("/", (req, res) => res.render("index"));
