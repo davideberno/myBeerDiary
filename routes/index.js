@@ -3,13 +3,28 @@ const router = express.Router();
 const loginCheck = require("../middleware/loginCheck");
 const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
+const User = require("../models/User");
 
 router.get("/", (req, res) => res.render("index"));
 
 router.get("/dashboard", loginCheck(), (req, res) => {
-  res.render("dashboard", {
-    user: req.user.name
-  });
+  User.findOneAndUpdate({ user: req.user._id })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "beer"
+      }
+    })
+    .then(user => {
+      res.render("dashboard", {
+        user: user.name,
+        comments: user.comments
+      });
+    })
+    .catch(err => console.log(err));
+  // res.render("dashboard", {
+  //   user: req.user.name
+  // });
 });
 
 router.get("/beer", loginCheck(), (req, res) => {
@@ -35,9 +50,27 @@ router.post("/submit-beer", loginCheck(), (req, res) => {
   const { name, name_breweries, abv, image, price, comment } = req.body;
   Comment.create({ user: req.user._id, comment: comment })
     .then(newComment => {
-      Beer.create({ name, name_breweries, abv, image, price }).then(newBeer => {
-        newComment.beer = newBeer._id;
-        newBeer.comments.push(newComment._id);
+      Beer.create({
+        "fields.name": name,
+        "fields.name_breweries": name_breweries,
+        "fields.abv": abv,
+        "fields.image": image,
+        "fields.price": price,
+        "fields.comments": [newComment._id]
+      }).then(newBeer => {
+        Comment.findOneAndUpdate(
+          { _id: newComment._id },
+          { $push: { beer: newBeer._id } },
+          { new: true }
+        ).then(comment => {
+          User.findOneAndUpdate(
+            { _id: req.user._id },
+            { $push: { comments: newComment._id } },
+            { new: true }
+          ).then(user => {
+            res.redirect("/dashboard");
+          });
+        });
       });
     })
     .catch(err => console.log(err));
