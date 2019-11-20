@@ -15,10 +15,10 @@ router.get("/login", (req, res) => res.render("login"));
 router.get("/register", (req, res) => res.render("signin"));
 
 router.post("/register", (req, res) => {
-  const { name, email, password, password2 } = req.body;
+  const { name, username, password, password2 } = req.body;
   let errors = [];
 
-  if (!name || !email || !password || !password2) {
+  if (!name || !username || !password || !password2) {
     errors.push({ msg: "Please fill all fields" });
   }
 
@@ -33,7 +33,7 @@ router.post("/register", (req, res) => {
   if (errors.length > 0) {
     res.render("signin", { errors });
   } else {
-    User.findOne({ email: email })
+    User.findOne({ username: username })
       .then(found => {
         if (found) {
           errors.push({ msg: "Email already in use!" });
@@ -43,7 +43,7 @@ router.post("/register", (req, res) => {
             bcrypt.hash(password, salt).then(hash => {
               User.create({
                 name: name,
-                email: email,
+                username: username,
                 password: hash
               }).then(newUser => {
                 req.login(newUser, err => {
