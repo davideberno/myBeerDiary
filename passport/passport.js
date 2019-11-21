@@ -36,7 +36,6 @@ passport.use(
       User.findOne({ githubId: profile.id })
         .then(user => {
           if (user) {
-            console.log(profile);
             done(null, user);
           } else {
             return User.create({

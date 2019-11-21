@@ -1,22 +1,28 @@
-<div class="card mb-3">
-  <h3 class="card-header"><a href="/beer/{{beer._id}}">{{beer.fields.name}}</a> </h3>
-  <div class="card-body">
-    <h5 class="card-title">Brewery: {{beer.fields.name_breweries}}</h5>
+<div class="card card-body mb-3 transparent-background">
+  <div class="row">
+    <div class="col-md-2">
+      <img src="{{beer.fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+    </div>
+    <div class="col-md-7 text-white">
+      <h3 class="card-header"><a href="/beer/{{beer._id}}">{{beer.fields.name}} </a></h3>
+      {{#if beer.fields.name_breweries}}
+      <h5 class="card-text mt-2">Brewery: {{beer.fields.name_breweries}}</h5>
+      {{/if}}
+      {{#if beer.fields.country}}
+      <p class="card-text mt-2">Country of origin: {{beer.fields.country}}</p>
+      {{/if}}
+      {{#if beer.fields.price }}
+      <p class="card-text mt-2">Price: {{beer.fields.price}}</p>
+      {{/if}}
+      <div class="transparent-background text-white">
+        <div class="row">
+          <h5 class="card-title text-red mx-2">{{user.name}} said:</h5>
+          <div class="card card-body transparent-background text-white">
+            <p class=" card-header ">{{comment}}</p>
+            <p class="card-text">{{date}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  {{#if beer.fields.image}}
-  <img src="{{beer.fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
-  {{/if}}
-  <ul class="list-group list-group-flush">
-    {{#if beer.fields.abv}}
-    <li id="abv" class="list-group-item">ABV: {{beer.fields.abv}}</li>
-    {{/if}}
-    <li class="list-group-item">Country of origin: {{beer.fields.country}}</li>
-    {{#if beer.fields.price }}
-    <li id="price" class="list-group-item">Price: {{beer.fields.price}}</li>
-    {{/if}}
-    {{#if beer.fields.ibu }}
-    <li id="ibu" class="list-group-item">IBU: {{beer.fields.ibu}}</li>
-    {{/if}}
-  </ul>
-  <p class="card-text">{{user}}{{comment}}{{date}}</p>
 </div>

@@ -38,7 +38,6 @@ router.get("/dashboard", loginCheck(), (req, res) => {
       path: "beer"
     })
     .then(comments => {
-      console.log(comments);
       res.render("dashboard", {
         user: req.user,
         comments: comments
@@ -51,11 +50,7 @@ router.get("/beer", loginCheck(), (req, res) => {
   res.render("beer", { user: req.user });
 });
 
-router.get("/submit-beer", loginCheck(), (req, res) => {
-  res.render("submit-beer", { user: req.user });
-});
-
-router.get("/beer/:beerId", (req, res) => {
+router.get("/beer/:beerId", loginCheck(), (req, res) => {
   Beer.findOne({ _id: req.params.beerId })
     .populate({
       path: "fields.comments",
@@ -72,6 +67,7 @@ router.get("/beer/:beerId", (req, res) => {
 
 router.post(
   "/submit-beer",
+  loginCheck(),
   uploadCloud.single("beerPicture"),
   loginCheck(),
   (req, res) => {
@@ -104,11 +100,11 @@ router.post(
   }
 );
 
-router.get("/search", (req, res) => {
+router.get("/search", loginCheck(), (req, res) => {
   res.render("search", { user: req.user });
 });
 
-router.post("/search", (req, res) => {
+router.post("/search", loginCheck(), (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
       res.render("search", { searchResult: found, user: req.user });
@@ -116,7 +112,7 @@ router.post("/search", (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post("/beer/:id/comment", (req, res, next) => {
+router.post("/beer/:id/comment", loginCheck(), (req, res, next) => {
   Comment.create({
     comment: req.body.newComment,
     user: req.user._id,
@@ -126,9 +122,7 @@ router.post("/beer/:id/comment", (req, res, next) => {
       return Beer.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $push: {
-            "fields.comments": comment._id
-          }
+          $push: { "fields.comments": { $each: [comment._id], $position: 0 } }
         },
         {
           new: true

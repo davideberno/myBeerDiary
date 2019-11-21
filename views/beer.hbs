@@ -1,39 +1,48 @@
 {{#with beer}}
-<div class="card mb-3">
-  <h3 class="card-header">Name: <a href="/beer/{{_id}}">{{fields.name}}</a> </h3>
-  <div class="card-body">
-    <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
+<div class="container">
+  <div class="card card-body mb-3 transparent-background text-white">
+    <h3 class="card-header"><a href="/beer/{{_id}}">{{fields.name}}</a> </h3>
+    <div class="row">
+      <div class="col-md-2">
+        <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+      </div>
+      <div class="col-md-7 ml-5">
+        <h5 class="card-title mt-4">Brewery: {{fields.name_breweries}}</h5>
+        <ul class="card-text">
+          {{#if fields.style_name}}
+          <li id="abv" class="card-text mb-2">Style name: {{fields.style_name}}</li>
+          {{/if}}
+          {{#if fields.abv}}
+          <li id="abv" class="card-text mb-2">ABV: {{fields.abv}}%</li>
+          {{/if}}
+          <li class="card-text mb-2">Country of origin: {{fields.country}}</li>
+          {{#if fields.price }}
+          <li id="price" class="card-text mb-2">Price: {{fields.price}}</li>
+          {{/if}}
+          {{#if fields.ibu }}
+          <li id="ibu" class="card-text mb-2">IBU: {{fields.ibu}}</li>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+    <div class="card card-body mb-3 transparent-background">
+      <form action="/beer/{{_id}}/comment" method="POST">
+        <label for="newComment">Add a comment:</label>
+        <textarea class="form-control mb-2" id="newComment" name="newComment" rows="3"></textarea>
+        <button class="btn btn-primary" id="submit-comment" type="submit">Comment</button>
+      </form>
+    </div>
   </div>
-  {{#if fields.image}}
-  <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
-  {{/if}}
-  <ul class="list-group list-group-flush">
-    {{#if fields.abv}}
-    <li id="abv" class="list-group-item">ABV: {{fields.abv}}</li>
-    {{/if}}
-    <li class="list-group-item">Country of origin: {{fields.country}}</li>
-    {{#if fields.price }}
-    <li id="price" class="list-group-item">Price: {{fields.price}}</li>
-    {{/if}}
-    {{#if fields.ibu }}
-    <li id="ibu" class="list-group-item">IBU: {{fields.ibu}}</li>
-    {{/if}}
-  </ul>
-  <div class="card mb-3">
-    <form action="/beer/{{_id}}/comment" method="POST">
-      <input type="text" id="newComment" name="newComment">
-      <button id="submit-comment" type="submit">Comment</button>
-    </form>
-  </div>
-
-  <div>
+  {{#if fields.comments}}
+  <div class="container card card-body scroll-container mb-3 transparent-background text-white">
     {{#each fields.comments}}
     {{> commentCard}}
     {{/each}}
   </div>
+  {{/if}}
 </div>
-{{/with}}
 
+{{/with}}
 {{!-- <script>
   document.getElementById('submit-comment').onclick = event => {
     event.preventDefault();
