@@ -1,25 +1,22 @@
-<div class="col-md">
-  <div class="card card-body mb-3">
-    <h3 class="card-header">Name: {{beer.fields.name}} </h3>
-    {{#if beer.fields.name_breweries}}
-    <div class="card-body">
-      <h5 class="card-title">Brewery: {{beer.fields.name_breweries}}</h5>
-    </div>
-    {{/if}}
-    {{#if beer.fields.image}}
-    <img src="{{beer.fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
-    {{/if}}
-    <ul class="list-group list-group-flush">
-      {{#if beer.fields.abv}}
-      <li id="abv" class="list-group-item">ABV: {{beer.fields.abv}}</li>
-      {{/if}}
-      {{#if beer.fields.country}}
-      <li class="list-group-item">Country of origin: {{beer.fields.country}}</li>
-      {{/if}}
-      {{#if beer.fields.price }}
-      <li id="price" class="list-group-item">Price: {{beer.fields.price}}</li>
-      {{/if}}
-    </ul>
-    <p class="card-text">{{user.username}} said: {{comment}}</p>
+<div class="card mb-3">
+  <h3 class="card-header"><a href="/beer/{{beer._id}}">{{beer.fields.name}}</a> </h3>
+  <div class="card-body">
+    <h5 class="card-title">Brewery: {{beer.fields.name_breweries}}</h5>
   </div>
+  {{#if beer.fields.image}}
+  <img src="{{beer.fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+  {{/if}}
+  <ul class="list-group list-group-flush">
+    {{#if beer.fields.abv}}
+    <li id="abv" class="list-group-item">ABV: {{beer.fields.abv}}</li>
+    {{/if}}
+    <li class="list-group-item">Country of origin: {{beer.fields.country}}</li>
+    {{#if beer.fields.price }}
+    <li id="price" class="list-group-item">Price: {{beer.fields.price}}</li>
+    {{/if}}
+    {{#if beer.fields.ibu }}
+    <li id="ibu" class="list-group-item">IBU: {{beer.fields.ibu}}</li>
+    {{/if}}
+  </ul>
+  <p class="card-text">{{user}}{{comment}}{{date}}</p>
 </div>

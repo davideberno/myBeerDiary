@@ -4,16 +4,13 @@ const loginCheck = require("../middleware/loginCheck");
 const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
-const hbs = require("hbs");
 const uploadCloud = require("../config/cloudinary");
-
-hbs.registerPartials(__dirname + "/views/partials");
 
 router.get("/", (req, res) => {
   if (req.user) {
     res.redirect("/feeds");
   } else {
-    res.render("index");
+    res.render("index", { user: req.user });
   }
 });
 
@@ -27,7 +24,6 @@ router.get("/feeds", loginCheck(), (req, res) => {
       path: "user"
     })
     .then(comments => {
-      //res.send(comments);
       res.render("feeds", {
         user: req.user.name,
         comments: comments
@@ -42,7 +38,7 @@ router.get("/dashboard", loginCheck(), (req, res) => {
       path: "beer"
     })
     .then(comments => {
-      //res.send(comments);
+      console.log(comments);
       res.render("dashboard", {
         user: req.user,
         comments: comments
@@ -52,11 +48,11 @@ router.get("/dashboard", loginCheck(), (req, res) => {
 });
 
 router.get("/beer", loginCheck(), (req, res) => {
-  res.render("beer");
+  res.render("beer", { user: req.user });
 });
 
 router.get("/submit-beer", loginCheck(), (req, res) => {
-  res.render("submit-beer");
+  res.render("submit-beer", { user: req.user });
 });
 
 router.get("/beer/:beerId", (req, res) => {
@@ -65,19 +61,13 @@ router.get("/beer/:beerId", (req, res) => {
       path: "fields.comments",
       populate: {
         path: "fields.comments"
-      }
+      },
+      populate: { path: "user" }
     })
     .then(beer => {
-      console.log(beer);
-      res.render("beer.hbs", { beer });
+      res.render("beer.hbs", { beer: beer, user: req.user });
     })
     .catch(err => console.log(err));
-
-  /*   const beer = beer.find(el => {
-    if (el.fields.name === beerName) {
-      return true;
-    }
-  }); */
 });
 
 router.post(
@@ -115,15 +105,46 @@ router.post(
 );
 
 router.get("/search", (req, res) => {
-  res.render("search");
+  res.render("search", { user: req.user });
 });
 
 router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
-      res.render("search", { searchResult: found });
+      res.render("search", { searchResult: found, user: req.user });
     })
     .catch(err => console.log(err));
+});
+
+router.post("/beer/:id/comment", (req, res, next) => {
+  Comment.create({
+    comment: req.body.newComment,
+    user: req.user._id,
+    beer: req.params.id
+  })
+    .then(comment => {
+      return Beer.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $push: {
+            "fields.comments": comment._id
+          }
+        },
+        {
+          new: true
+        }
+      )
+        .populate({
+          path: "fields.comments"
+        })
+        .then(beer => {
+          res.redirect(`/beer/${beer._id}`);
+          //res.json(beer.fields.comments);
+        });
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 module.exports = router;

@@ -10,7 +10,11 @@ const commentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Beer"
   },
-  comment: String
+  comment: String,
+  date: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

@@ -3,11 +3,9 @@
         <div class="card card-body text-white transparent-background">
             <h1 class="text-center mb-3">Login</h1>
             <img class="logo" src="../img/beer-logo.png" alt="logo">
-            {{#if msg}}
-            {{> success}}
-            {{/if}}
-            {{#if errors}}
-            {{> error}}
+
+            {{#if message}}
+            <div class="alert mt-2 alert-primary" role="alert">{{message}}</div>
             {{/if}}
             <form action="/users/login" method="POST">
                 <div class="form-group">

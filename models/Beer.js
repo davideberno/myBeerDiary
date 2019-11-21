@@ -17,6 +17,7 @@ const beerSchema = new Schema({
     },
 
     price: Number,
+    lastComment: Date,
     comments: [
       {
         type: Schema.Types.ObjectId,

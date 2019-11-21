@@ -6,9 +6,11 @@ const User = require("../models/User");
 const Comment = require("../models/Comment");
 const uploadCloud = require("../config/cloudinary");
 
-router.get("/login", (req, res) => res.render("login"));
+router.get("/login", (req, res) =>
+  res.render("login", { user: req.user, message: req.flash("error") })
+);
 
-router.get("/register", (req, res) => res.render("signin"));
+router.get("/register", (req, res) => res.render("signin", { user: req.user }));
 
 router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
   console.log(req.file.url);
@@ -18,7 +20,7 @@ router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
     errors.push({ msg: "Please fill all fields" });
   }
 
-  if (password2 !== password2) {
+  if (password !== password2) {
     errors.push({ msg: "Passwords don't match!" });
   }
 
@@ -27,13 +29,13 @@ router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render("signin", { errors });
+    res.render("signin", { errors: errors, user: req.user });
   } else {
     User.findOne({ username: username })
       .then(found => {
         if (found) {
           errors.push({ msg: "Email already in use!" });
-          res.render("signin", { errors });
+          res.render("signin", { errors: errors, user: req.user });
         } else {
           bcrypt.genSalt(10).then(salt => {
             bcrypt.hash(password, salt).then(hash => {
@@ -78,7 +80,7 @@ router.get(
 
 router.get("/logout", (req, res) => {
   req.logout();
-  res.render("index", { msg: "Logged out" });
+  res.render("index", { msg: "Logged out", user: req.user });
 });
 
 module.exports = router;

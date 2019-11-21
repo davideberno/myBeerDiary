@@ -18,9 +18,11 @@
     <li id="ibu" class="list-group-item">IBU: {{fields.ibu}}</li>
     {{/if}}
   </ul>
-  <div id="comment-card" class="card mb-3">
-    <input type="text" name="comment-beer" id="comment-beer">
-    <button id="comment-button">Comment</button>
+  <div class="card mb-3">
+    <form action="/submit-comment" method="POST">
+      <input type="text">
+      <button type="submit">Comment</button>
+    </form>
   </div>
 
   <div>

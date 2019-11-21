@@ -1,3 +1,57 @@
 {{#with beer}}
-{{> beerCard}}
+<div class="card mb-3">
+  <h3 class="card-header">Name: <a href="/beer/{{_id}}">{{fields.name}}</a> </h3>
+  <div class="card-body">
+    <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
+  </div>
+  {{#if fields.image}}
+  <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+  {{/if}}
+  <ul class="list-group list-group-flush">
+    {{#if fields.abv}}
+    <li id="abv" class="list-group-item">ABV: {{fields.abv}}</li>
+    {{/if}}
+    <li class="list-group-item">Country of origin: {{fields.country}}</li>
+    {{#if fields.price }}
+    <li id="price" class="list-group-item">Price: {{fields.price}}</li>
+    {{/if}}
+    {{#if fields.ibu }}
+    <li id="ibu" class="list-group-item">IBU: {{fields.ibu}}</li>
+    {{/if}}
+  </ul>
+  <div class="card mb-3">
+    <form action="/beer/{{_id}}/comment" method="POST">
+      <input type="text" id="newComment" name="newComment">
+      <button id="submit-comment" type="submit">Comment</button>
+    </form>
+  </div>
+
+  <div>
+    {{#each fields.comments}}
+    {{> commentCard}}
+    {{/each}}
+  </div>
+</div>
 {{/with}}
+
+{{!-- <script>
+  document.getElementById('submit-comment').onclick = event => {
+    event.preventDefault();
+
+    axios.post("/beer/{{beer._id}}/comment", {
+      comment: document.getElementById('newComment').value
+    }).then(res => {
+      res.data.forEach(comment => {
+        console.log(comment)
+        let commentBox = "";
+        commentBox += `<h4>${comment.author.username}</h4><p>${comment.content}</p>`
+      })
+      document.getElementById("comment-box").innerHTML = commentBox;
+
+      document.getElementById('newComment').value = ""
+    })
+  }).catch (err => {
+    console.log(err);
+  })
+  }
+</script> --}}
