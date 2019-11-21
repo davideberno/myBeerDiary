@@ -1,9 +1,13 @@
-<div class="card mb-3">
-  <h3 class="card-header"><a href="/beer/{{_id}}">{{fields.name}}</a> </h3>
-  <div class="card-body">
-    <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
+<div class="card card-body mb-3 transparent-background">
+  <div class="row">
+    <div class="col-md-2">
+      <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
+    </div>
+    <div class="col-md-7 text-white">
+      <h3 class="card-header"><a href="/beer/{{_id}}">{{fields.name}} </a></h3>
+      {{#if fields.name_breweries}}
+      <h5 class="card-text mt-2">Brewery: {{fields.name_breweries}}</h5>
+      {{/if}}
+    </div>
   </div>
-  {{#if fields.image}}
-  <img src="{{fields.image}}" style="height: 200px; width: 100px;" alt="image of the beer">
-  {{/if}}
 </div>
