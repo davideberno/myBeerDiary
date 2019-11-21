@@ -4,7 +4,7 @@ const loginCheck = require("../middleware/loginCheck");
 const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
-const uploadCloud = require("../config/cloudinary");
+const uploadBeerCloud = require("../config/beer-cloudinary");
 
 router.get("/", (req, res) => {
   if (req.user) {
@@ -72,17 +72,20 @@ router.get("/beer/:beerId", (req, res) => {
 
 router.post(
   "/submit-beer",
-  uploadCloud.single("beerPicture"),
+  uploadBeerCloud.single("beerPicture"),
   loginCheck(),
   (req, res) => {
-    const { name, name_breweries, abv, image, price, comment } = req.body;
+    const { name, name_breweries, abv, price, comment } = req.body;
+    const defaultBeerImage =
+      "https://res.cloudinary.com/dj6au0ai7/image/upload/v1574329546/image/default-beer-pic_p1upv8.png";
+    let beerPicture = req.file ? req.file.url : defaultBeerImage;
     Comment.create({ user: req.user._id, comment: comment })
       .then(newComment => {
         Beer.create({
           "fields.name": name,
           "fields.name_breweries": name_breweries,
           "fields.abv": abv,
-          "fields.image": image,
+          "fields.image": beerPicture,
           "fields.price": price,
           "fields.comments": [newComment._id]
         }).then(newBeer => {

@@ -14,12 +14,13 @@ const storage = cloudinaryStorage({
   allowedFormats: ["jpg", "png"],
   transformation: [
     {
-      width: 250,
-      height: 250,
+      height: 400,
+      width: 200,
       crop: "thumb",
-      gravity: "face"
+      gravity: "auto:bottle"
     }
   ],
+
   // params: { resource_type: 'raw' }, => this is in case you want to upload other type of files, not just images
   filename: function(req, res, cb) {
     cb(null, res.originalname); // The file on cloudinary would have the same name as the original file name

@@ -6,10 +6,7 @@ const userSchema = new Schema({
   username: String,
   password: String,
   githubId: String,
-  profilePicture: {
-    type: String,
-    default: "https://res.cloudinary.com/dj6au0ai7/image/upload/v1574329547/image/default-profile-pic_r6q1oi.png"
-  },
+  profilePicture: String,
   comments: [
     {
       type: Schema.Types.ObjectId,
