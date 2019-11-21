@@ -30,7 +30,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/users/github/callback"
+      callbackURL: "https://my-beer-diary.herokuapp.com/users/github/callback"
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ githubId: profile.id })
