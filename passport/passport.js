@@ -5,8 +5,8 @@ const GithubStrategy = require("passport-github").Strategy;
 const passport = require("passport");
 
 passport.use(
-  new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
-    User.findOne({ email: email })
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username })
       .then(user => {
         if (!user) {
           return done(null, false, { msg: "Invalid credentials" });

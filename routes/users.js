@@ -13,7 +13,6 @@ router.get("/login", (req, res) =>
 router.get("/register", (req, res) => res.render("signin", { user: req.user }));
 
 router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
-  console.log(req.file.url);
   const { name, username, password, password2 } = req.body;
   let errors = [];
   if (!name || !username || !password || !password2) {
@@ -34,7 +33,7 @@ router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
     User.findOne({ username: username })
       .then(found => {
         if (found) {
-          errors.push({ msg: "Email already in use!" });
+          errors.push({ msg: "Username already in use!" });
           res.render("signin", { errors: errors, user: req.user });
         } else {
           bcrypt.genSalt(10).then(salt => {
@@ -45,7 +44,6 @@ router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
                 password: hash,
                 profilePicture: req.file.url
               }).then(newUser => {
-                console.log("hier");
                 req.login(newUser, err => {
                   if (err) next(err);
                   else res.redirect("/dashboard");

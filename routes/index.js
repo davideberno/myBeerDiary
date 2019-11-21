@@ -33,17 +33,19 @@ router.get("/feeds", loginCheck(), (req, res) => {
 });
 
 router.get("/dashboard", loginCheck(), (req, res) => {
-  Comment.find({ user: req.user._id })
+  User.findOne({ _id: req.user._id })
     .populate({
-      path: "beer"
+      path: "comments",
+      populate: {
+        path: "beer"
+      }
     })
-    .then(comments => {
-      res.render("dashboard", {
-        user: req.user,
-        comments: comments
-      });
+    .then(user => {
+      res.render("dashboard", { user: req.user, comments: user.comments });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 router.get("/beer", loginCheck(), (req, res) => {
@@ -88,7 +90,10 @@ router.post(
           ).then(comment => {
             User.findOneAndUpdate(
               { _id: req.user._id },
-              { $push: { comments: newComment._id } },
+              {
+                $push: { comments: { $each: [comment._id], $position: 0 } }
+              },
+              // { $push: { comments: newComment._id } },
               { new: true }
             ).then(user => {
               res.redirect("/dashboard");
