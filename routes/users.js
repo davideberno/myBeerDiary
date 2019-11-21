@@ -3,16 +3,12 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
-const Comment = require("../models/Comment");
-const hbs = require("hbs");
 
-hbs.registerPartials(__dirname + "/views/partials");
+router.get("/login", (req, res) =>
+  res.render("login", { user: req.user, message: req.flash("error") })
+);
 
-hbs.registerPartials(__dirname + "/views/partials");
-
-router.get("/login", (req, res) => res.render("login"));
-
-router.get("/register", (req, res) => res.render("signin"));
+router.get("/register", (req, res) => res.render("signin", { user: req.user }));
 
 router.post("/register", (req, res) => {
   const { name, username, password, password2 } = req.body;
@@ -22,7 +18,7 @@ router.post("/register", (req, res) => {
     errors.push({ msg: "Please fill all fields" });
   }
 
-  if (password2 !== password2) {
+  if (password !== password2) {
     errors.push({ msg: "Passwords don't match!" });
   }
 
@@ -31,13 +27,13 @@ router.post("/register", (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render("signin", { errors });
+    res.render("signin", { errors: errors, user: req.user });
   } else {
     User.findOne({ username: username })
       .then(found => {
         if (found) {
           errors.push({ msg: "Email already in use!" });
-          res.render("signin", { errors });
+          res.render("signin", { errors: errors, user: req.user });
         } else {
           bcrypt.genSalt(10).then(salt => {
             bcrypt.hash(password, salt).then(hash => {
@@ -80,7 +76,7 @@ router.get(
 
 router.get("/logout", (req, res) => {
   req.logout();
-  res.render("index", { msg: "Logged out" });
+  res.render("index", { msg: "Logged out", user: req.user });
 });
 
 module.exports = router;

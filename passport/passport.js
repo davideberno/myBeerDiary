@@ -9,11 +9,11 @@ passport.use(
     User.findOne({ email: email })
       .then(user => {
         if (!user) {
-          return done(null, false, { message: "Invalid credentials" });
+          return done(null, false, { msg: "Invalid credentials" });
         }
         bcrypt.compare(password, user.password).then(match => {
           if (!match) {
-            return done(null, false, { message: "Invalid credentials" });
+            return done(null, false, { msg: "Invalid credentials" });
           } else {
             return done(null, user);
           }

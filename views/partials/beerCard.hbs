@@ -19,12 +19,15 @@
     {{/if}}
   </ul>
   <div class="card mb-3">
-    <button type="submit">Comment</button>
+    <form action="/submit-comment" method="POST">
+      <input type="text">
+      <button type="submit">Comment</button>
+    </form>
   </div>
 
   <div>
-    {{!-- {{#each comment}}
-    beerId.commentArray
-  {{/each}} --}}
+    {{#each fields.comments}}
+    {{> commentCard}}
+    {{/each}}
   </div>
 </div>
