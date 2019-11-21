@@ -4,20 +4,16 @@ const passport = require("passport");
 const router = express.Router();
 const User = require("../models/User");
 const Comment = require("../models/Comment");
-const hbs = require("hbs");
-
-hbs.registerPartials(__dirname + "/views/partials");
-
-hbs.registerPartials(__dirname + "/views/partials");
+const uploadCloud = require("../config/cloudinary");
 
 router.get("/login", (req, res) => res.render("login"));
 
 router.get("/register", (req, res) => res.render("signin"));
 
-router.post("/register", (req, res) => {
+router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
+  console.log(req.file.url);
   const { name, username, password, password2 } = req.body;
   let errors = [];
-
   if (!name || !username || !password || !password2) {
     errors.push({ msg: "Please fill all fields" });
   }
@@ -44,8 +40,10 @@ router.post("/register", (req, res) => {
               User.create({
                 name: name,
                 username: username,
-                password: hash
+                password: hash,
+                profilePicture: req.file.url
               }).then(newUser => {
+                console.log("hier");
                 req.login(newUser, err => {
                   if (err) next(err);
                   else res.redirect("/dashboard");

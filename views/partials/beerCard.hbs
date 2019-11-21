@@ -1,5 +1,5 @@
 <div class="card mb-3">
-  <h3 class="card-header">Name: >{{fields.name}} </h3>
+  <h3 class="card-header">Name: {{fields.name}} </h3>
   <div class="card-body">
     <h5 class="card-title">Brewery: {{fields.name_breweries}}</h5>
   </div>
@@ -24,9 +24,9 @@
   </div>
 
   <div>
-    {{!-- {{#each comment}}
-    beerId.commentArray
-  {{/each}} --}}
+    {{#each fields.comments}}
+    {{> commentCard}}
+    {{/each}}
   </div>
 </div>
 

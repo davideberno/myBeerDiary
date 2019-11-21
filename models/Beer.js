@@ -11,7 +11,11 @@ const beerSchema = new Schema({
     coordinates: [],
     abv: Number,
     ibu: Number,
-    image: String,
+    image: {
+      type: String,
+      default: "https://res.cloudinary.com/dj6au0ai7/image/upload/v1574329546/image/default-beer-pic_p1upv8.png"
+    },
+
     price: Number,
     comments: [
       {

@@ -5,10 +5,7 @@ const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 const hbs = require("hbs");
-
-hbs.registerPartials(__dirname + "/views/partials");
-
-hbs.registerPartials(__dirname + "/views/partials");
+const uploadCloud = require("../config/cloudinary");
 
 hbs.registerPartials(__dirname + "/views/partials");
 
@@ -64,6 +61,12 @@ router.get("/submit-beer", loginCheck(), (req, res) => {
 
 router.get("/beer/:beerId", (req, res) => {
   Beer.findOne({ _id: req.params.beerId })
+    .populate({
+      path: "fields.comments",
+      populate: {
+        path: "fields.comments"
+      }
+    })
     .then(beer => {
       console.log(beer);
       res.render("beer.hbs", { beer });
@@ -77,34 +80,39 @@ router.get("/beer/:beerId", (req, res) => {
   }); */
 });
 
-router.post("/submit-beer", loginCheck(), (req, res) => {
-  const { name, name_breweries, abv, image, price, comment } = req.body;
-  Comment.create({ user: req.user._id, comment: comment })
-    .then(newComment => {
-      Beer.create({
-        "fields.name": name,
-        "fields.name_breweries": name_breweries,
-        "fields.abv": abv,
-        "fields.image": image,
-        "fields.price": price,
-        "fields.comments": [newComment._id]
-      }).then(newBeer => {
-        Comment.findOneAndUpdate(
-          { _id: newComment._id },
-          { beer: newBeer._id }
-        ).then(comment => {
-          User.findOneAndUpdate(
-            { _id: req.user._id },
-            { $push: { comments: newComment._id } },
-            { new: true }
-          ).then(user => {
-            res.redirect("/dashboard");
+router.post(
+  "/submit-beer",
+  uploadCloud.single("beerPicture"),
+  loginCheck(),
+  (req, res) => {
+    const { name, name_breweries, abv, image, price, comment } = req.body;
+    Comment.create({ user: req.user._id, comment: comment })
+      .then(newComment => {
+        Beer.create({
+          "fields.name": name,
+          "fields.name_breweries": name_breweries,
+          "fields.abv": abv,
+          "fields.image": image,
+          "fields.price": price,
+          "fields.comments": [newComment._id]
+        }).then(newBeer => {
+          Comment.findOneAndUpdate(
+            { _id: newComment._id },
+            { beer: newBeer._id }
+          ).then(comment => {
+            User.findOneAndUpdate(
+              { _id: req.user._id },
+              { $push: { comments: newComment._id } },
+              { new: true }
+            ).then(user => {
+              res.redirect("/dashboard");
+            });
           });
         });
-      });
-    })
-    .catch(err => console.log(err));
-});
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 router.get("/search", (req, res) => {
   res.render("search");
@@ -117,9 +125,5 @@ router.post("/search", (req, res) => {
     })
     .catch(err => console.log(err));
 });
-
-
-
-
 
 module.exports = router;
