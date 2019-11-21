@@ -10,14 +10,14 @@
         <h5 class="card-title mt-4">Brewery: {{fields.name_breweries}}</h5>
         <ul class="card-text">
           {{#if fields.style_name}}
-          <li id="abv" class="card-text mb-2">Style name: {{fields.style_name}}</li>
+          <li id="abv" class="card-text mb-2">Style: {{fields.style_name}}</li>
           {{/if}}
           {{#if fields.abv}}
           <li id="abv" class="card-text mb-2">ABV: {{fields.abv}}%</li>
           {{/if}}
           <li class="card-text mb-2">Country of origin: {{fields.country}}</li>
           {{#if fields.price }}
-          <li id="price" class="card-text mb-2">Price: {{fields.price}}</li>
+          <li id="price" class="card-text mb-2">Price: {{fields.price}}€</li>
           {{/if}}
           {{#if fields.ibu }}
           <li id="ibu" class="card-text mb-2">IBU: {{fields.ibu}}</li>
@@ -27,7 +27,7 @@
     </div>
     <div class="card card-body mb-3 transparent-background">
       <form action="/beer/{{_id}}/comment" method="POST">
-        <label for="newComment">Add a comment:</label>
+        <label for="newComment">Add a review:</label>
         <textarea class="form-control mb-2" id="newComment" name="newComment" rows="3"></textarea>
         <button class="btn btn-primary" id="submit-comment" type="submit">Comment</button>
       </form>

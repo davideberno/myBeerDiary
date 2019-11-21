@@ -4,7 +4,7 @@ const loginCheck = require("../middleware/loginCheck");
 const Beer = require("../models/Beer");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
-const uploadCloud = require("../config/cloudinary");
+const uploadBeerCloud = require("../config/beer-cloudinary");
 
 router.get("/", (req, res) => {
   if (req.user) {
@@ -16,6 +16,7 @@ router.get("/", (req, res) => {
 
 router.get("/feeds", loginCheck(), (req, res) => {
   Comment.find()
+    .sort({ _id: -1 })
     .limit(5)
     .populate({
       path: "beer"
@@ -52,7 +53,11 @@ router.get("/beer", loginCheck(), (req, res) => {
   res.render("beer", { user: req.user });
 });
 
-router.get("/beer/:beerId", loginCheck(), (req, res) => {
+router.get("/submit-beer", loginCheck(), (req, res) => {
+  res.render("submit-beer", { user: req.user });
+});
+
+router.get("/beer/:beerId", (req, res) => {
   Beer.findOne({ _id: req.params.beerId })
     .populate({
       path: "fields.comments",
@@ -69,20 +74,23 @@ router.get("/beer/:beerId", loginCheck(), (req, res) => {
 
 router.post(
   "/submit-beer",
-  loginCheck(),
-  uploadCloud.single("beerPicture"),
+  uploadBeerCloud.single("beerPicture"),
   loginCheck(),
   (req, res) => {
-    const { name, name_breweries, abv, image, price, comment } = req.body;
+    const { name, name_breweries, abv, price, comment, style_name } = req.body;
+    const defaultBeerImage =
+      "https://res.cloudinary.com/dj6au0ai7/image/upload/v1574329546/image/default-beer-pic_p1upv8.png";
+    let beerPicture = req.file ? req.file.url : defaultBeerImage;
     Comment.create({ user: req.user._id, comment: comment })
       .then(newComment => {
         Beer.create({
           "fields.name": name,
           "fields.name_breweries": name_breweries,
           "fields.abv": abv,
-          "fields.image": image,
+          "fields.image": beerPicture,
           "fields.price": price,
-          "fields.comments": [newComment._id]
+          "fields.comments": [newComment._id],
+          "fields.style_name": style_name
         }).then(newBeer => {
           Comment.findOneAndUpdate(
             { _id: newComment._id },
@@ -93,7 +101,6 @@ router.post(
               {
                 $push: { comments: { $each: [comment._id], $position: 0 } }
               },
-              // { $push: { comments: newComment._id } },
               { new: true }
             ).then(user => {
               res.redirect("/dashboard");
@@ -105,11 +112,11 @@ router.post(
   }
 );
 
-router.get("/search", loginCheck(), (req, res) => {
+router.get("/search", (req, res) => {
   res.render("search", { user: req.user });
 });
 
-router.post("/search", loginCheck(), (req, res) => {
+router.post("/search", (req, res) => {
   Beer.find({ $text: { $search: req.body.search } })
     .then(found => {
       res.render("search", { searchResult: found, user: req.user });
@@ -117,7 +124,7 @@ router.post("/search", loginCheck(), (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post("/beer/:id/comment", loginCheck(), (req, res, next) => {
+router.post("/beer/:id/comment", (req, res, next) => {
   Comment.create({
     comment: req.body.newComment,
     user: req.user._id,
@@ -137,8 +144,20 @@ router.post("/beer/:id/comment", loginCheck(), (req, res, next) => {
           path: "fields.comments"
         })
         .then(beer => {
-          res.redirect(`/beer/${beer._id}`);
-          //res.json(beer.fields.comments);
+          User.findOneAndUpdate(
+            { _id: req.user._id },
+            {
+              $push: {
+                comments: { $each: [comment._id], $position: 0 }
+              }
+            },
+            {
+              new: true
+            }
+          ).then(user => {
+            res.redirect(`/beer/${beer._id}`);
+            //res.json(beer.fields.comments);
+          });
         });
     })
     .catch(err => {

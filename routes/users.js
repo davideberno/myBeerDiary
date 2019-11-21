@@ -14,6 +14,9 @@ router.get("/register", (req, res) => res.render("signin", { user: req.user }));
 
 router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
   const { name, username, password, password2 } = req.body;
+  const defaultUserImage =
+    "https://res.cloudinary.com/dj6au0ai7/image/upload/v1574329547/image/default-profile-pic_r6q1oi.png";
+  let profilePicture = req.file ? req.file.url : defaultUserImage;
   let errors = [];
   if (!name || !username || !password || !password2) {
     errors.push({ msg: "Please fill all fields" });
@@ -42,7 +45,7 @@ router.post("/register", uploadCloud.single("profilePicture"), (req, res) => {
                 name: name,
                 username: username,
                 password: hash,
-                profilePicture: req.file.url
+                profilePicture: profilePicture
               }).then(newUser => {
                 req.login(newUser, err => {
                   if (err) next(err);
